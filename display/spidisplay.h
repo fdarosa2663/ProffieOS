@@ -1,7 +1,7 @@
 #ifndef DISPLAY_SPIDISPLAY_H
 #define DISPLAY_SPIDISPLAY_H
 
-// Unfortunately, including SPI.h uses 3k even if if it's never actually used on Proffieboards.
+// Unfortunately, including SPI.h uses 3k even if it's never actually used on Proffieboards.
 #include <SPI.h>
 
 constexpr uint8_t encode_sleep_time(int millis) {
@@ -203,11 +203,11 @@ struct ST7735 : public ST77XXCommands {
     > RCMD3;
 
   typedef ConcatByteArrays<
-    SLEEP<30>,
+    SLEEP<150>,
     SWRESET,
     SLEEP<150>,
     SLPOUT,
-    SLEEP<500>,
+    SLEEP<150>,
     FRMCTR1<0x01, 0x2C, 0x2D>,
     FRMCTR2<0x01, 0x2C, 0x2D>,
     FRMCTR3<0x01, 0x2C, 0x2D, 0x01, 0x2C, 0x2D>,
@@ -401,6 +401,9 @@ struct SpiIrqHelper {
       case 1: return cb1;
       case 2: return cb2;
       case 3: return cb3;
+      default:
+	STDERR << "Too many SPI displays!";
+	[[gnu::fallthrough]];
       case 4: return cb4;
     }
   }
@@ -510,7 +513,7 @@ public:
 
   const char* name() override { return "SPIDisplay_AdaFruit358"; }
   
-  SPIDisplayBase() {
+  SPIDisplayBase() : Looper(HFLINK) {
     cb = spi_irq_helper.getCallback(this);
   }
 
@@ -616,6 +619,7 @@ public:
   
   void Loop() override {
     while (to_send_ < to_send_end_) {
+      if (transferring_.get()) return;
       if (wait_time_) {
 	if (millis() - wait_start_ < wait_time_) {
 	  return;
@@ -651,7 +655,7 @@ public:
       return true;
     }
     if (!strcmp(cmd, "displaystate")) {
-      STDOUT << "to_send: " << (to_send_end_ - to_send_) << "\n";
+      STDOUT << "to_send: " << (to_send_end_ - to_send_) << " transferring: " << transferring_.get()  << "\n";
       STDOUT << "PCLK1: " << stm32l4_system_pclk1() << " PCLK2: " << stm32l4_system_pclk2() << "\n";;
       HELPER::frame::dumpstate();
       return true;
@@ -742,13 +746,13 @@ using SPIDisplay_DFRobot096 = SPIDisplay77XX<
 
 
 template<int LAYERS,
-	 class CONFIG = DisplayConfig<0, InsetT<0,0,20,20>>,
+	 class CONFIG = DisplayConfig<1, InsetT<0,0,20,20>>,
 	 class SA = CSDisplayAdapter<blade4Pin>>
 using SPIDisplay_AdaFruit5206 = SPIDisplay77XX<
   LAYERS,
   CONFIG,
   // HELPER
-  DisplayConfigHelper<LAYERS, CONFIG, SizeT<320, 240>, SA, ST7789>,
+  DisplayConfigHelper<LAYERS, CONFIG, SizeT<240, 320>, SA, ST7789>,
   // InitSequence
   ConcatByteArrays<ST7789::GENERIC_ST7789_STARTUP, typename CONFIG::template rotation_cmd<ST7789> > ,
   // OnSequence
