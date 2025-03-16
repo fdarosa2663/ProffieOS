@@ -1582,7 +1582,6 @@ SaberFett263Buttons() : PropBase() {}
     SetPresetFast(current_preset_.preset_num);
   }
 
-    
   void SayStyleNumber(int style_num) {
     sound_library_.SayStyle();
     sound_library_.SayNumber(style_num, SAY_WHOLE);
@@ -1736,6 +1735,7 @@ SaberFett263Buttons() : PropBase() {}
     itoa(Color16(color_source).g, new_color + strlen(new_color), 10);
     strcat(new_color, ",");
     itoa(Color16(color_source).b, new_color + strlen(new_color), 10);
+
 #if NUM_BLADES > 1
     if (color_mode_ == CC_COLOR_LIST  || color_mode_ == CC_ZOOM_COLOR) {
       for (int i = 1; i <= NUM_BLADES; i++) {
@@ -4012,7 +4012,7 @@ SaberFett263Buttons() : PropBase() {}
           if (direction > 0) {
             sound_library_.SayUp();
           } else {
-	    sound_library_.SayDown();
+            sound_library_.SayDown();
           }
 #endif
           break;
@@ -5942,7 +5942,7 @@ SaberFett263Buttons() : PropBase() {}
           SaberBase::DoEffect(EFFECT_USER1, 0);
 #endif
         return true;
-	}
+        }
 #endif
         return false;
 
@@ -5955,7 +5955,7 @@ SaberFett263Buttons() : PropBase() {}
             MenuDialIncrement(-1);
             return true;
           }
-	}
+        }
         if (swinging_) {
           return false;
         }
@@ -5971,7 +5971,7 @@ SaberFett263Buttons() : PropBase() {}
           SaberBase::DoEffect(EFFECT_USER2, 0);
 #endif
           return true;
-	}
+        }
 #endif
         return false;
 
