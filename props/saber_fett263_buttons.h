@@ -627,7 +627,7 @@ OPTIONAL DEFINES (added to CONFIG_TOP in config.h file)
   Increase/decrease the "15" value as needed
 
   FETT263_MOTION_WAKE_POWER_BUTTON
-  Enables a click on POWER Button to Wake Up Gestures after MOTION_TIMEOUT without igniting blade.  
+  Enables a click on POWER Button to Wake Up Gestures after MOTION_TIMEOUT without igniting blade.
   Saber will play boot sound and gestures will be active.
 
   FETT263_QUOTE_PLAYER_START_ON
@@ -643,7 +643,7 @@ OPTIONAL DEFINES (added to CONFIG_TOP in config.h file)
   Changes Brightness Menu to Circular Control
 
 == Disable Features ==
-  DISABLE_TALKIE - saves memory by replacing spoken error messages with beep sequences - 
+  DISABLE_TALKIE - saves memory by replacing spoken error messages with beep sequences -
 
   FETT263_DISABLE_CHANGE_FONT - Disables the "on-the-fly" Change Font option
 
