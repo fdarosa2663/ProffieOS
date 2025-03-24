@@ -1039,7 +1039,7 @@ public:
   void DetectSwing() {
     if (!swinging_ && fusor.swing_speed() > 250) {
       swinging_ = true;
-      Event(BUTTON_NONE, EVENT_SWING);
+      if (millis() - last_clash_ > 150) Event(BUTTON_NONE, EVENT_SWING);
     }
     if (swinging_ && fusor.swing_speed() < 100) {
       swinging_ = false;
